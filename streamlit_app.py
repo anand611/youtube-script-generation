@@ -1,20 +1,6 @@
 import streamlit as st 
 from utils import generate_script
 
-# Applying Styling
-st.markdown("""
-<style>
-div.stButton > button:first-child {
-    background-color: #0099ff;
-    color:#ffffff;
-}
-div.stButton > button:hover {
-    background-color: #ff0000;
-    color:#FFFFFF;
-    }
-</style>""", unsafe_allow_html=True)
-
-
 # Creating Session State Variable
 if 'API_Key' not in st.session_state:
     st.session_state['API_Key'] =''
