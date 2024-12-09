@@ -26,7 +26,7 @@ st.title('❤️ YouTube Script Writing Tool')
 # st.sidebar.title("😎🗝️")
 # st.session_state['API_Key']= st.sidebar.text_input("What's your API key?",type="password",value="efHp2fnjFAWmhjsTKOL9EmxQ2qFutOmm")
 # st.sidebar.image('./Youtube.jpg',width=300, use_container_width=True)
-st.session_state['API_Key']=efHp2fnjFAWmhjsTKOL9EmxQ2qFutOmm
+st.session_state['API_Key']="efHp2fnjFAWmhjsTKOL9EmxQ2qFutOmm"
 
 # Captures User Inputs
 prompt = st.text_input('Please provide the topic of the video',key="prompt")  # The box for the text prompt
