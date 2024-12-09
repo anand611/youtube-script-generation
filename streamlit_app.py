@@ -1,61 +1,59 @@
-import streamlit as st
-import os
-from utils import *
+import streamlit as st 
+from utils import generate_script
 
-os.environ["MISTRAL_API_KEY"]="PzsIjy5b1ldYJEt0thzJPpBGbFKocCFy"
-
-st.title('❤️ Get answer from documents') 
-
-# # Sidebar to capture the OpenAi API key
-# st.sidebar.title("😎🗝️")
-# st.session_state['API_Key']= st.sidebar.text_input("What's your API key?",type="password",value="efHp2fnjFAWmhjsTKOL9EmxQ2qFutOmm")
-# docs_loaded = st.sidebar.button("Load docs",on_click=get_documents)
-# # st.sidebar.image('./Youtube.jpg',width=300, use_container_width=True)
-
-
-# # Captures User Inputs
-# prompt = st.text_input('Please provide the topic of the video',key="prompt")  # The box for the text prompt
-# # video_length = st.text_input('Expected Video Length 🕒 (in minutes)',key="video_length")  # The box for the text prompt
-# # creativity = st.slider('Creativity limit ✨ - (0 LOW || 1 HIGH)', 0.0, 1.0, 0.2,step=0.1)
-
-# submit = st.button("Get answer")
+# Applying Styling
+st.markdown("""
+<style>
+div.stButton > button:first-child {
+    background-color: #0099ff;
+    color:#ffffff;
+}
+div.stButton > button:hover {
+    background-color: #ff0000;
+    color:#FFFFFF;
+    }
+</style>""", unsafe_allow_html=True)
 
 
-def get_answer_clicked(query):
-    st.session_state['docs_loaded'] = True
-    if not st.session_state['docs_loaded']:
-        st.warning("Data not loaded")
-    # st.toast(f"Query: {query}")
-    if query and st.session_state['docs_loaded']:
-        st.toast("Question submitted..")
-        # llm=get_llm_model()
-        # chain = get_chain(llm=llm)
-        # answer = get_answer(chain=chain,query=query)
-        # st.success(answer)
-        # st.write("MCQs from the response....")
-        # markdown_text = generate_mcq_from_document(answer)
-        # json_string = re.search(r'{(.*?)}',markdown_text,re.DOTALL).group(1)
-        # st.write(json_string)
-        
-        documents = get_documents(from_file=False,file_path='')
-        splitted_data = splitting_text(documents=documents)
-        embeddings,vectorstore = get_embeddings_model(api_key=os.environ["MISTRAL_API_KEY"])
-        push_to_vectorstore(vectorstore=vectorstore,splitted_text=splitted_data)
-        
-        results = vectorstore.similarity_search(query=query)
-        print(results)
-        st.markdown(results)
-        
-def main():
-    st.session_state['docs_loaded'] = True
-    # st.set_page_config(
-    # page_title="Resolve Query",
-    # page_icon="🗃",
-    # )
-    st.write("# Resolve Query 👋")
-    # directory = file_selector()
-    # st.button("Load Data",on_click=load_data,args=[directory])
-    query = st.text_input("Question",placeholder="what is your query?")
-    st.button("Get Answer",on_click=get_answer_clicked,args=[query])
-if __name__=="__main__":
-    main()    
+# Creating Session State Variable
+if 'API_Key' not in st.session_state:
+    st.session_state['API_Key'] =''
+
+
+st.title('❤️ YouTube Script Writing Tool') 
+
+# Sidebar to capture the OpenAi API key
+st.sidebar.title("😎🗝️")
+st.session_state['API_Key']= st.sidebar.text_input("What's your API key?",type="password",value="efHp2fnjFAWmhjsTKOL9EmxQ2qFutOmm")
+st.sidebar.image('./Youtube.jpg',width=300, use_container_width=True)
+
+
+# Captures User Inputs
+prompt = st.text_input('Please provide the topic of the video',key="prompt")  # The box for the text prompt
+video_length = st.text_input('Expected Video Length 🕒 (in minutes)',key="video_length")  # The box for the text prompt
+# creativity = st.slider('Creativity limit ✨ - (0 LOW || 1 HIGH)', 0.0, 1.0, 0.2,step=0.1)
+
+submit = st.button("Generate Script for me")
+
+
+if submit:
+    
+    if st.session_state['API_Key']:
+        search_result,title,script = generate_script(prompt,video_length)
+        #Let's generate the script
+        st.success('Hope you like this script ❤️')
+
+        #Display Title
+        st.subheader("Title:🔥")
+        st.write(title)
+
+        #Display Video Script
+        st.subheader("Your Video Script:📝")
+        st.write(script)
+
+        #Display Search Engine Result
+        # st.subheader("Check Out - DuckDuckGo Search:🔍")
+        # with st.expander('Show me 👀'): 
+        #     st.info(search_result)
+    else:
+        st.error("Ooopssss!!! Please provide API key.....")
